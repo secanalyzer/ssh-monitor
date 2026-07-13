@@ -56,7 +56,7 @@ GSSAPIKeyExchange No
 TCPKeepAlive    Yes
 ForwardX11      Yes
 ServerAliveInterval 59
-GatewayPorts    Yes
+
 USER alice
 IdentityFile /home/alice/.ssh/id_ed25519
 ```
