@@ -20,11 +20,11 @@ start_origin "$ORIGIN_PORT"      || { finish; exit 1; }
 
 svc_cleanup() {
   systemctl --user stop "$SERVICE" 2>/dev/null
-  "$PY" "$PROG" uninstall --user-scope --service-name "$SERVICE" >/dev/null 2>&1
+  "$PROG" uninstall --user-scope --service-name "$SERVICE" >/dev/null 2>&1
 }
 trap 'svc_cleanup; teardown' EXIT
 
-"$PY" "$PROG" install --user-scope --service-name "$SERVICE" \
+"$PROG" install --user-scope --service-name "$SERVICE" \
     --remote-host 127.0.0.1 --remote-ssh-port "$SSHD_PORT" --user "$USER" \
     --key "$WORK/clientkey" --socks-port "$SOCKS_PORT" \
     -o UserKnownHostsFile="$WORK/known_hosts" -o StrictHostKeyChecking=no \
@@ -42,7 +42,7 @@ port_listening "$SOCKS_PORT" && bad "SOCKS port still open after stop" \
 pgrep -f "clientkey -D ${SOCKS_PORT}[^0-9]" >/dev/null \
     && bad "orphaned ssh after stop" || ok "no orphaned ssh after stop"
 
-"$PY" "$PROG" uninstall --user-scope --service-name "$SERVICE" >/dev/null 2>&1
+"$PROG" uninstall --user-scope --service-name "$SERVICE" >/dev/null 2>&1
 assert_eq "service inactive after uninstall" \
     "$(systemctl --user is-active "$SERVICE" 2>/dev/null)" "inactive"
 

@@ -5,8 +5,7 @@ set -u
 . "$(dirname "$0")/lib.sh"
 echo "[test_cmd] ssh command construction"
 
-PY="$(command -v python3)"
-dry() { "$PY" "$PROG" run --dry-run "$@"; }
+dry() { "$PROG" run --dry-run "$@"; }
 
 # 1. defaults, direct (no -J): must match the reference command's essentials.
 out="$(dry)"

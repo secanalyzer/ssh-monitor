@@ -7,7 +7,7 @@ set -u
 . "$(dirname "$0")/lib.sh"
 echo "[test_reconstruct] connection args round-trip into the unit"
 
-unit="$("$PY" "$PROG" print-unit \
+unit="$("$PROG" print-unit \
     --user bob --jump-host jh --jump-port 2200 --jump-user gw \
     --remote-host rh --remote-ssh-port 2022 --key /k/id \
     --socks-port 3335 --server-alive-interval 45 --max-retries 7 \

@@ -1,6 +1,6 @@
 # Tests
 
-Self-contained test suite for `ssh_monitor.py`. Every test that needs a
+Self-contained test suite for `ssh_monitor.sh`. Every test that needs a
 network stands up a **throwaway `sshd` on `127.0.0.1`** (and a second one as a
 jump host) plus a local HTTP "origin" behind the tunnel, using disposable keys in
 a `mktemp` dir. Nothing touches the system sshd, the user's real `~/.ssh`, or the
@@ -16,8 +16,10 @@ bash tests/run_all.sh test_tunnel  # subset (name glob)
 Prints per-test `PASS`/`FAIL` lines and a final `TOTAL: N passed, M failed`.
 Exit code is non-zero if anything failed.
 
-**Requires:** `python3`, `ssh`, `sshd` (`/usr/sbin/sshd`), `ssh-keygen`, `curl`,
-`ss`. The systemd test self-skips if `systemctl --user` is unavailable.
+**Requires:** `bash`, `ssh`, `sshd` (`/usr/sbin/sshd`), `ssh-keygen`, `curl`,
+`ss`, and `python3` (only for the throwaway HTTP origin server the tunnel
+tests fetch through — the program under test needs no Python). The systemd
+test self-skips if `systemctl --user` is unavailable.
 
 ## What each test covers
 

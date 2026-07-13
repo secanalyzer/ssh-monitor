@@ -1,16 +1,17 @@
 # ssh_monitor
 
 Supervises an SSH dynamic (SOCKS5) tunnel with auto-reconnect and ships it as a
-systemd service. Pure Python 3 stdlib, no dependencies, no `autossh` needed.
+systemd service. Pure Bash + OpenSSH client, no other dependencies — no `autossh`.
 
 Reproduces:
 
 ```bash
-ssh -J user@jumpbox:5522 -i /home/user/.ssh/id_ed25519 -o ServerAliveInterval=30 \
+ssh -J user@jumpbox:5522 -i /home/user/.ssh/id_ed25519 \
+    -o ServerAliveInterval=30 \
     -D 23456 -p 22 user@server1
 ```
 
-The local SOCKS5 proxy is exposed on `127.0.0.1:<socks-port>`.
+The local SOCKS5 proxy is exposed on `127.0.0.1:23456`.
 
 ## Parameters (defaults match the reference command)
 
@@ -64,16 +65,16 @@ IdentityFile /home/alice/.ssh/id_ed25519
 
 ```bash
 # direct connection, default port
-./ssh_monitor.py run
+./ssh_monitor.sh run
 
 # via jump host, on an alternate port
-./ssh_monitor.py run -J --socks-port 3335
+./ssh_monitor.sh run -J --socks-port 3335
 
 # preview the exact ssh command without running it
-./ssh_monitor.py run -J --socks-port 23459 --dry-run
+./ssh_monitor.sh run -J --socks-port 23459 --dry-run
 ```
 
-`run` is the default, so `./ssh_monitor.py -J --socks-port 3335` also works.
+`run` is the default, so `./ssh_monitor.sh -J --socks-port 3335` also works.
 
 ## Supervise an arbitrary ssh command
 
@@ -84,10 +85,10 @@ reconnect/backoff/retry policy:
 
 ```bash
 # monitor + auto-restart a port-forward command
-./ssh_monitor.py run --max-retries -1 -- ssh -N -L 8080:127.0.0.1:80 user@server1
+./ssh_monitor.sh run --max-retries -1 -- ssh -N -L 8080:127.0.0.1:80 user@server1
 
 # short-lived command: run it ONCE, exit with its status, never restart
-./ssh_monitor.py run --once -- ssh user@server1 uptime
+./ssh_monitor.sh run --once -- ssh user@server1 uptime
 ```
 
 * Without `--once`, the command is supervised exactly like the built-in tunnel
@@ -117,18 +118,18 @@ reconnect/backoff/retry policy:
 System-wide (needs root; `WantedBy=multi-user.target`):
 
 ```bash
-sudo ./ssh_monitor.py install -J --socks-port 23456
-sudo ./ssh_monitor.py status
-sudo ./ssh_monitor.py uninstall
+sudo ./ssh_monitor.sh install -J --socks-port 23456
+sudo ./ssh_monitor.sh status
+sudo ./ssh_monitor.sh uninstall
 ```
 
 Per-user (no root; `systemctl --user`, `WantedBy=default.target`):
 
 ```bash
-./ssh_monitor.py install --user-scope -J --socks-port 3335
+./ssh_monitor.sh install --user-scope -J --socks-port 3335
 systemctl --user status ssh-monitor
 # survive logout:  loginctl enable-linger "$USER"
-./ssh_monitor.py uninstall --user-scope
+./ssh_monitor.sh uninstall --user-scope
 ```
 
 `install` writes the unit, `daemon-reload`s, `enable`s (auto-start on boot) and
@@ -157,7 +158,7 @@ but the two differ in approach and scope (autossh facts per `autossh(1)`, v1.4g)
 | systemd | generates and manages its own units: `install` / `uninstall` / `status` / `print-unit`, `--user-scope`, `--service-name` for parallel tunnels | bring your own unit file |
 | Scope | any ssh command (`run -- ssh …`), plus `--once` for short-lived commands | tunnel keeper only |
 | Jump hosts | first-class: `--jump`, `--jump-user`, `--jump-port`, `--ssh-config` | pass raw `-J` yourself |
-| Implementation | single-file Python 3 stdlib, with a test suite | C binary from a package |
+| Implementation | single-file Bash script, with a test suite | C binary from a package |
 
 Where ssh_monitor is the better fit:
 
@@ -173,7 +174,7 @@ Where ssh_monitor is the better fit:
   service files to keep in sync.
 * **Broader than tunnels.** The same supervision applies to any ssh command,
   and `--once` covers run-to-completion jobs.
-* **Hackable and testable.** Plain stdlib Python with tests beats patching and
+* **Hackable and testable.** A plain Bash script with tests beats patching and
   rebuilding C when behavior needs to change.
 
 Pick autossh instead if you specifically want active in-band traffic probing —

@@ -11,7 +11,7 @@
 set -u
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROG="$(cd "$HERE/.." && pwd)/ssh_monitor.py"
+PROG="$(cd "$HERE/.." && pwd)/ssh_monitor.sh"
 PY="$(command -v python3)"
 
 # Ports (overridable via env to avoid collisions).
@@ -95,7 +95,7 @@ start_origin() { # port
 
 # Start the supervisor in the background; echoes its PID.
 start_tunnel() { # args...
-  "$PY" "$PROG" run "$@" >>"$WORK/tunnel.log" 2>&1 &
+  "$PROG" run "$@" >>"$WORK/tunnel.log" 2>&1 &
   local pid=$!; _PIDS+=("$pid"); echo "$pid"
 }
 

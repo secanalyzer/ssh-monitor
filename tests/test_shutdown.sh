@@ -14,7 +14,7 @@ exec sleep 3000
 EOF
 chmod +x "$FAKEBIN/ssh"
 
-PATH="$FAKEBIN:$PATH" "$PY" "$PROG" run --socks-port "$SOCKS_PORT" \
+PATH="$FAKEBIN:$PATH" "$PROG" run --socks-port "$SOCKS_PORT" \
     > "$WORK/shut.log" 2>&1 &
 pid=$!; _PIDS+=("$pid")
 sleep 1.5

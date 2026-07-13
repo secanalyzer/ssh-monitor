@@ -16,7 +16,7 @@ exit 255
 EOF
 chmod +x "$FAKEBIN/ssh"
 
-PATH="$FAKEBIN:$PATH" "$PY" "$PROG" run --socks-port "$SOCKS_PORT" \
+PATH="$FAKEBIN:$PATH" "$PROG" run --socks-port "$SOCKS_PORT" \
     --max-retries 3 --backoff-base 1 --backoff-cap 1 > "$WORK/exhaust.log" 2>&1
 rc=$?
 assert_eq "exhaustion exit code is 3" "$rc" "3"
@@ -31,7 +31,7 @@ exit 1
 EOF
 chmod +x "$FAKEBIN/ssh"
 
-PATH="$FAKEBIN:$PATH" "$PY" "$PROG" run --socks-port "$SOCKS_PORT" \
+PATH="$FAKEBIN:$PATH" "$PROG" run --socks-port "$SOCKS_PORT" \
     --max-retries 2 --stable-after 1 --backoff-base 1 --backoff-cap 1 \
     > "$WORK/stable.log" 2>&1 &
 pid=$!; _PIDS+=("$pid")

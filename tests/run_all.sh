@@ -4,7 +4,7 @@
 #   bash tests/run_all.sh            # run every test
 #   bash tests/run_all.sh test_cmd   # run a subset by name (globbed)
 #
-# Requires: python3, ssh, sshd, ssh-keygen, curl, ss. The systemd test
+# Requires: bash, ssh, sshd, ssh-keygen, curl, ss, python3 (test HTTP origin only). The systemd test
 # self-skips if `systemctl --user` is unavailable.
 set -u
 cd "$(dirname "$0")"
