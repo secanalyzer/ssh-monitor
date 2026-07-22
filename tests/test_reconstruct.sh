@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # reconstruct_run_args round-trip (offline): every connection flag must reappear,
 # with its value, in the generated systemd unit's ExecStart. This locks the
-# single-source-of-truth CONN_PARAMS table so a future edit cannot silently drop a
+# single-source-of-truth CONN_FLAGS table so a future edit cannot silently drop a
 # flag from the installed service.
 set -u
 . "$(dirname "$0")/lib.sh"

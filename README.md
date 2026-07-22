@@ -6,7 +6,7 @@ systemd service. Pure Bash + OpenSSH client, no other dependencies — no `autos
 Reproduces:
 
 ```bash
-ssh -J user@jumpbox:5522 -i /home/user/.ssh/id_ed25519 \
+ssh -J user@jumpbox:5522 -i /home/user/.ssh/id_rsa \
     -o ServerAliveInterval=30 \
     -D 23456 -p 22 user@server1
 ```
@@ -23,7 +23,7 @@ The local SOCKS5 proxy is exposed on `127.0.0.1:23456`.
 | `--jump-user` | same as `--user` | login user on the jump host, when it differs from the target's |
 | `--remote-host` | `server1` | remote host |
 | `--remote-ssh-port` | `22` | remote SSH port |
-| `--key` | `/home/user/.ssh/id_ed25519` | private key file |
+| `--key` | `/home/user/.ssh/id_rsa` | private key file |
 | `--socks-port` | `23456` | local SOCKS5 proxy port |
 | `-J`, `--jump` | off | use the JumpProxy (`ssh -J`); omit to connect **directly** |
 | `-o`, `--ssh-option KEY=VALUE` | – | extra `ssh -o` option (repeatable; overrides built-in defaults) |

@@ -26,6 +26,8 @@ test self-skips if `systemctl --user` is unavailable.
 | File | Network? | Checks |
 |------|----------|--------|
 | `test_cmd.sh` | no | ssh command construction: defaults match the reference command, `-J` toggle, alternate ports/params, `-o` overriding a built-in default (ssh first-value-wins), `-F` flag |
+| `test_custom_cmd.sh` | no | verbatim custom command (with and without `--`); `--once` runs exactly once and propagates the exit status; without `--once` a custom command gets the normal monitor/retry loop; command + `--once` round-trip into the unit (`Restart=no`) |
+| `test_reconstruct.sh` | no | every connection flag reappears with its value in the generated unit's `ExecStart` — locks the single-source-of-truth `CONN_FLAGS` table |
 | `test_retry.sh` | no (fake `ssh`) | exhaustion after `--max-retries` → exit `3`; a session up ≥ `--stable-after` resets the budget so it never falsely exhausts |
 | `test_shutdown.sh` | no (fake `ssh`) | `SIGTERM` → exit `0` in < 3s, no orphaned child, no forced SIGKILL |
 | `test_tunnel_direct.sh` | yes | real `ssh -D` to localhost sshd; HTTP fetched through the SOCKS5 proxy |

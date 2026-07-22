@@ -1,9 +1,0 @@
-# Public-surface diff: baseline (ae6ec68) vs HEAD
-# The public API is the CLI (subcommands, flags, defaults, exit codes, unit format).
-
-## run --help long-flags:
-(no difference)
-
-## dry-run command (defaults, and -J + -o passthrough):
-(no difference for: [])
-(no difference for: [-J -o Compression=yes])
